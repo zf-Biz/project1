@@ -4,6 +4,8 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
+import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
+
 public class TicTacToe extends JPanel {
     private static final int GAP = 4;
     private static final int WIDTH = 80;
@@ -31,19 +33,7 @@ public class TicTacToe extends JPanel {
                 buttons[i][j].setBorder(BorderFactory.createLineBorder(Color.BLACK));
                 buttons[i][j].addActionListener(e -> {
                     JButton clicked = (JButton) e.getSource();
-                    BufferedImage circleImg = new BufferedImage(WIDTH, WIDTH, BufferedImage.TYPE_INT_ARGB);
-                    Graphics2D g2 = circleImg.createGraphics();
-                    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                    g2.setColor(Color.RED);
-                    int x = GAP;
-                    int y = x;
-                    int width = WIDTH - 2 * x;
-                    int height = WIDTH - 2 * y;
-                    g2.drawOval(x, y, width, height);
-                    g2.dispose();
-//                    clicked.setEnabled(false);
-                    clicked.setIcon(new ImageIcon(circleImg, "O"));
-                    pcDrawX();
+                    playerDrawO(clicked);
                 });
                 panel[panelI][panelJ].add(buttons[i][j]);
             }
@@ -55,6 +45,26 @@ public class TicTacToe extends JPanel {
             createAndShowGui();
         });
         add(restart, BorderLayout.PAGE_END);
+    }
+
+    public void playerDrawO(JButton button) {
+        if (button.getIcon() == null) {
+            BufferedImage circleImg = new BufferedImage(WIDTH, WIDTH, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2 = circleImg.createGraphics();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setColor(Color.RED);
+            int x = GAP;
+            int y = x;
+            int width = WIDTH - 2 * x;
+            int height = WIDTH - 2 * y;
+            g2.drawOval(x, y, width, height);
+            g2.dispose();
+//                    clicked.setEnabled(false);
+            button.setIcon(new ImageIcon(circleImg, "O"));
+            pcDrawX();
+        } else {
+            JOptionPane.showMessageDialog(this.getComponent(0), "error");
+        }
     }
 
 
@@ -76,6 +86,8 @@ public class TicTacToe extends JPanel {
             } else {
                 pcDrawX();
             }
+        } else {
+            iconCheck();
         }
     }
 
@@ -94,8 +106,49 @@ public class TicTacToe extends JPanel {
     }
 
     public void iconCheck() {
-        if ((buttons[0][0].getIcon().toString() == buttons[0][1].getIcon().toString()) && (buttons[0][1].getIcon().toString() == buttons[0][2].getIcon().toString())) {
+        ArrayList<Icon> temp = new ArrayList<>();
+        for (JButton[] n : buttons) {
+            for (JButton b : n) {
+                if (b.getIcon() == null) {
+                    BufferedImage emptyImg = new BufferedImage(WIDTH, WIDTH, BufferedImage.TYPE_INT_ARGB);
+                    temp.add(new ImageIcon(emptyImg, "empty"));
+                } else {
+                    temp.add(b.getIcon());
+                }
+            }
+        }
+        if (temp.get(0).toString().equals("O") && temp.get(1).toString().equals("O") && temp.get(2).toString().equals("O")) {
             JOptionPane.showMessageDialog(this.getComponent(0), "Jūs laimėjote!");
+        } else if (temp.get(3).toString().equals("O") && temp.get(4).toString().equals("O") && temp.get(5).toString().equals("O")) {
+            JOptionPane.showMessageDialog(this.getComponent(0), "Jūs laimėjote!");
+        } else if (temp.get(6).toString().equals("O") && temp.get(7).toString().equals("O") && temp.get(8).toString().equals("O")) {
+            JOptionPane.showMessageDialog(this.getComponent(0), "Jūs laimėjote!");
+        } else if (temp.get(0).toString().equals("O") && temp.get(3).toString().equals("O") && temp.get(6).toString().equals("O")) {
+            JOptionPane.showMessageDialog(this.getComponent(0), "Jūs laimėjote!");
+        } else if (temp.get(1).toString().equals("O") && temp.get(4).toString().equals("O") && temp.get(7).toString().equals("O")) {
+            JOptionPane.showMessageDialog(this.getComponent(0), "Jūs laimėjote!");
+        } else if (temp.get(2).toString().equals("O") && temp.get(5).toString().equals("O") && temp.get(8).toString().equals("O")) {
+            JOptionPane.showMessageDialog(this.getComponent(0), "Jūs laimėjote!");
+        } else if (temp.get(0).toString().equals("O") && temp.get(4).toString().equals("O") && temp.get(8).toString().equals("O")) {
+            JOptionPane.showMessageDialog(this.getComponent(0), "Jūs laimėjote!");
+        } else if (temp.get(6).toString().equals("O") && temp.get(4).toString().equals("O") && temp.get(2).toString().equals("O")) {
+            JOptionPane.showMessageDialog(this.getComponent(0), "Jūs laimėjote!");//
+        } else if (temp.get(0).toString().equals("X") && temp.get(1).toString().equals("X") && temp.get(2).toString().equals("X")) {
+            JOptionPane.showMessageDialog(this.getComponent(0), "Jūs pralaimėjote!");
+        } else if (temp.get(3).toString().equals("X") && temp.get(4).toString().equals("X") && temp.get(5).toString().equals("X")) {
+            JOptionPane.showMessageDialog(this.getComponent(0), "Jūs pralaimėjote!");
+        } else if (temp.get(6).toString().equals("X") && temp.get(7).toString().equals("X") && temp.get(8).toString().equals("X")) {
+            JOptionPane.showMessageDialog(this.getComponent(0), "Jūs pralaimėjote!");
+        } else if (temp.get(0).toString().equals("X") && temp.get(3).toString().equals("X") && temp.get(6).toString().equals("X")) {
+            JOptionPane.showMessageDialog(this.getComponent(0), "Jūs pralaimėjote!");
+        } else if (temp.get(1).toString().equals("X") && temp.get(4).toString().equals("X") && temp.get(7).toString().equals("X")) {
+            JOptionPane.showMessageDialog(this.getComponent(0), "Jūs pralaimėjote!");
+        } else if (temp.get(2).toString().equals("X") && temp.get(5).toString().equals("X") && temp.get(8).toString().equals("X")) {
+            JOptionPane.showMessageDialog(this.getComponent(0), "Jūs pralaimėjote!");
+        } else if (temp.get(0).toString().equals("X") && temp.get(4).toString().equals("X") && temp.get(8).toString().equals("X")) {
+            JOptionPane.showMessageDialog(this.getComponent(0), "Jūs lpraaimėjote!");
+        } else if (temp.get(6).toString().equals("X") && temp.get(4).toString().equals("X") && temp.get(2).toString().equals("X")) {
+            JOptionPane.showMessageDialog(this.getComponent(0), "Jūs pralaimėjote!");
         }
     }
 
@@ -104,7 +157,7 @@ public class TicTacToe extends JPanel {
         TicTacToe mainPanel = new TicTacToe();
 
         JFrame frame = new JFrame("Kryžiukai/Nuliukai");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         frame.getContentPane().add(mainPanel);
         frame.pack();
         frame.setLocationRelativeTo(null);
